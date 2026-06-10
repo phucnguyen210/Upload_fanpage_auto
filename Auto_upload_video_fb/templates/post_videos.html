@@ -1,0 +1,290 @@
+{% extends "index.html" %}
+{% block content %}
+
+<h1>📤 Đăng & Hẹn Lịch Video</h1>
+<p class="subtitle">Upload hàng loạt video lên Fanpage Facebook từ file Excel/CSV</p>
+
+<div class="alert alert-warn">
+  <span class="alert-icon">⚠️</span>
+  <span>
+    <strong>Lưu ý bảo mật:</strong> Chỉ dùng cho Fanpage bạn có quyền quản trị.
+    Page Access Token <strong>không được lưu</strong> vào lịch sử hoặc log.
+  </span>
+</div>
+
+{% if error %}
+<div class="alert alert-danger">
+  <span class="alert-icon">❌</span>
+  <span>{{ error }}</span>
+</div>
+{% endif %}
+
+<!-- ── FORM (ẩn sau khi submit) ── -->
+<div class="card" id="form-card" {% if job_id %}style="display:none"{% endif %}>
+  <p class="card-title">Thông tin đăng bài</p>
+  <form method="post" enctype="multipart/form-data" id="upload-form">
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="page_id">Page ID *</label>
+        <input type="text" id="page_id" name="page_id" placeholder="123456789012345" required />
+        <span class="hint">Cài đặt Fanpage → Thông tin trang</span>
+      </div>
+
+      <div class="form-group">
+        <label for="page_access_token">Page Access Token *</label>
+        <input type="password" id="page_access_token" name="page_access_token"
+               placeholder="EAA..." autocomplete="off" required />
+        <span class="token-warning">🔒 Token không được lưu sau khi xử lý</span>
+      </div>
+
+      <div class="form-group full">
+        <label for="post_file">File danh sách video (.xlsx / .csv) *</label>
+        <input type="file" id="post_file" name="post_file" accept=".xlsx,.csv" required />
+        <span class="hint">Cột bắt buộc: filename, title — Tùy chọn: hashtag, scheduled_time</span>
+      </div>
+
+      <div class="form-group">
+        <label for="video_dir">Thư mục chứa video</label>
+        <select id="video_dir" name="video_dir">
+          <option value="videos">videos/</option>
+          <option value="downloads">downloads/</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="timezone">Timezone</label>
+        <select id="timezone" name="timezone">
+          <option value="Asia/Ho_Chi_Minh" selected>Asia/Ho_Chi_Minh (GMT+7)</option>
+          <option value="Asia/Bangkok">Asia/Bangkok (GMT+7)</option>
+          <option value="Asia/Singapore">Asia/Singapore (GMT+8)</option>
+          <option value="UTC">UTC</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="divider" />
+    <div class="actions-row">
+      <button type="submit" class="btn btn-primary" id="submit-btn">🚀 Đăng / Hẹn lịch video</button>
+      <a href="/post-history" class="btn btn-ghost">🕓 Xem lịch sử</a>
+    </div>
+  </form>
+</div>
+
+<!-- Format hướng dẫn -->
+<div class="card" id="guide-card" {% if job_id %}style="display:none"{% endif %}>
+  <p class="card-title">📋 Format file Excel/CSV</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>filename</th><th>title</th><th>hashtag</th><th>scheduled_time</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono">video1.mp4</td>
+          <td>Cô gái nghèo bất ngờ đổi đời</td>
+          <td class="mono">#phimhay #viral</td>
+          <td class="mono">2026-06-10 08:00:00</td>
+        </tr>
+        <tr>
+          <td class="mono">video2.mp4</td>
+          <td>Tổng tài che giấu thân phận</td>
+          <td class="mono"><em style="color:var(--muted)">(tự sinh)</em></td>
+          <td class="mono">2026-06-10 10:00:00</td>
+        </tr>
+        <tr>
+          <td class="mono">video3.mp4</td>
+          <td>Một quyết định thay đổi số phận</td>
+          <td class="mono">#xuhuong</td>
+          <td class="mono"><em style="color:var(--muted)">(đăng ngay)</em></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── PROGRESS PANEL (hiện khi đang chạy) ── -->
+{% if job_id %}
+<div id="progress-panel">
+  <div class="progress-header">
+    <span id="progress-title">⬆️ Đang xử lý {{ total }} video...</span>
+    <span id="progress-count" class="mono"></span>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+
+  <!-- Log terminal -->
+  <div class="log-terminal" id="log-terminal">
+    <div class="log-line log-info">🔄 Kết nối với server...</div>
+  </div>
+</div>
+
+<!-- ── KẾT QUẢ (hiện sau khi xong) ── -->
+<div id="result-panel" style="display:none">
+  <h2 style="font-size:1.1rem; font-weight:600; margin:1.5rem 0 1rem;">📊 Kết quả</h2>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>File</th><th>Title</th><th>Hashtag</th>
+          <th>Hẹn lịch</th><th>Trạng thái</th><th>Video ID</th><th>Lỗi</th>
+        </tr>
+      </thead>
+      <tbody id="result-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="actions-row" style="margin-top:1.25rem;">
+    <a href="/post-videos" class="btn btn-primary">📤 Đăng thêm video</a>
+    <a href="/post-history" class="btn btn-ghost">🕓 Xem toàn bộ lịch sử</a>
+  </div>
+</div>
+
+<script>
+(function() {
+  const jobId = "{{ job_id }}";
+  const total = {{ total }};
+  let doneCount = 0;
+
+  const logEl   = document.getElementById("log-terminal");
+  const fillEl  = document.getElementById("progress-fill");
+  const pctEl   = document.getElementById("progress-pct");
+  const countEl = document.getElementById("progress-count");
+  const titleEl = document.getElementById("progress-title");
+
+  function addLog(msg, cls) {
+    const div = document.createElement("div");
+    div.className = "log-line " + (cls || "log-info");
+    div.textContent = msg;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function setProgress(done, tot) {
+    const pct = tot > 0 ? Math.round((done / tot) * 100) : 0;
+    fillEl.style.width = pct + "%";
+    pctEl.textContent = pct + "%";
+    countEl.textContent = done + "/" + tot;
+  }
+
+  function badgeHtml(status) {
+    const map = {
+      published: '<span class="badge badge-published">✓ published</span>',
+      scheduled: '<span class="badge badge-scheduled">⏰ scheduled</span>',
+      failed:    '<span class="badge badge-failed">✗ failed</span>',
+      pending:   '<span class="badge badge-pending">· pending</span>',
+    };
+    return map[status] || map.pending;
+  }
+
+  function renderResults(results, summary) {
+    // Stats
+    const statsEl = document.getElementById("stats-row");
+    statsEl.innerHTML = `
+      <div class="stat-box stat-total"><div class="num">${summary.total}</div><div class="label">Tổng video</div></div>
+      <div class="stat-box stat-ok"><div class="num">${summary.published}</div><div class="label">Đã đăng ngay</div></div>
+      <div class="stat-box stat-sched"><div class="num">${summary.scheduled}</div><div class="label">Đã hẹn lịch</div></div>
+      <div class="stat-box stat-err"><div class="num">${summary.failed}</div><div class="label">Lỗi</div></div>
+    `;
+
+    // Table
+    const tbody = document.getElementById("result-tbody");
+    tbody.innerHTML = "";
+    results.forEach((r, i) => {
+      const vidId = r.facebook_video_id
+        ? `<a href="https://www.facebook.com/video/${r.facebook_video_id}" target="_blank"
+              style="color:var(--accent);font-size:0.78rem;">${r.facebook_video_id}</a>`
+        : "—";
+      const errHtml = r.error_message
+        ? `<span class="err-text" title="${r.error_message.replace(/"/g,"&quot;")}">${r.error_message}</span>`
+        : "—";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="mono">${i+1}</td>
+        <td class="filename" title="${r.filename}">${r.filename}</td>
+        <td class="title-cell" title="${r.title}">${r.title}</td>
+        <td style="font-size:0.75rem;color:var(--muted);max-width:160px;word-break:break-word;">${r.hashtag||"—"}</td>
+        <td class="mono">${r.scheduled_time||"—"}</td>
+        <td>${badgeHtml(r.status)}</td>
+        <td class="mono">${vidId}</td>
+        <td>${errHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("result-panel").style.display = "block";
+  }
+
+  // Start SSE
+  const es = new EventSource("/post-videos/stream/" + jobId);
+
+  es.onmessage = function(e) {
+    let data;
+    try { data = JSON.parse(e.data); } catch { return; }
+
+    const type = data.type;
+
+    if (type === "start") {
+      addLog(data.msg, "log-info");
+    }
+    else if (type === "step") {
+      addLog(data.msg, "log-info");
+    }
+    else if (type === "uploading") {
+      addLog(data.msg, "log-warn");
+    }
+    else if (type === "chunk_progress") {
+      const cls = "log-chunk-" + data.idx;
+      const existing = logEl.querySelector("." + cls);
+      if (existing) {
+        existing.textContent = data.msg;
+      } else {
+        const div = document.createElement("div");
+        div.className = "log-line log-dim " + cls;
+        div.textContent = data.msg;
+        logEl.appendChild(div);
+      }
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    else if (type === "result") {
+      doneCount++;
+      setProgress(doneCount, total);
+      if (data.status === "failed") {
+        addLog(data.msg, "log-error");
+      } else {
+        addLog(data.msg, "log-success");
+      }
+    }
+    else if (type === "done") {
+      addLog("─".repeat(60), "log-dim");
+      addLog(data.msg, "log-success");
+      titleEl.textContent = "✅ Hoàn tất!";
+      setProgress(total, total);
+      es.close();
+      renderResults(data.results, data.summary);
+    }
+    else if (type === "error") {
+      addLog("❌ " + data.msg, "log-error");
+      es.close();
+    }
+  };
+
+  es.onerror = function() {
+    addLog("⚠️ Mất kết nối với server. Vui lòng tải lại trang.", "log-error");
+    es.close();
+  };
+})();
+</script>
+{% endif %}
+
+{% endblock %}

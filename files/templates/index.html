@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FB Video Downloader</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">▶</span>
+    <span>FB Video Downloader</span>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link active">Tải về</a>
+    <a href="/history" class="nav-link">Lịch sử</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- ── HƯỚNG DẪN ── -->
+  <section class="card info-card">
+    <div class="info-row">
+      <div class="info-step">
+        <span class="step-num">1</span>
+        <div>
+          <strong>Chuẩn bị CSV</strong>
+          <p>Chỉ cần cột <code>source_url</code> (link video FB) và <code>created_at</code></p>
+        </div>
+      </div>
+      <div class="info-arrow">→</div>
+      <div class="info-step">
+        <span class="step-num">2</span>
+        <div>
+          <strong>Đăng nhập Facebook</strong>
+          <p>Đảm bảo bạn đang đăng nhập FB trên <strong>Chrome / Firefox</strong> trước khi tải</p>
+        </div>
+      </div>
+      <div class="info-arrow">→</div>
+      <div class="info-step">
+        <span class="step-num">3</span>
+        <div>
+          <strong>Upload &amp; Chạy</strong>
+          <p>Tool tự dùng cookie trình duyệt để tải video private</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FORM ── -->
+  <section class="card form-card">
+    <h2 class="card-title">
+      <span class="title-icon">⬇</span>
+      Lọc &amp; Tải Video từ CSV
+    </h2>
+
+    {% if errors %}
+    <div class="alert alert-error">
+      {% for e in errors %}<p>⚠ {{ e }}</p>{% endfor %}
+    </div>
+    {% endif %}
+
+    <form action="/import-and-download" method="post" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="source_profile_url">Link Profile / Page Facebook (ghi chú nguồn)</label>
+        <input type="url" id="source_profile_url" name="source_profile_url"
+          placeholder="https://facebook.com/yourpage"
+          value="{{ source_profile_url or '' }}" />
+        <small class="hint">Chỉ để ghi chú. Tool không tự truy cập link này.</small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="start_date">Ngày bắt đầu <span class="required">*</span></label>
+          <input type="date" id="start_date" name="start_date" required
+            value="{{ start_date or '' }}" />
+        </div>
+        <div class="form-group">
+          <label for="end_date">Ngày kết thúc <span class="required">*</span></label>
+          <input type="date" id="end_date" name="end_date" required
+            value="{{ end_date or today }}" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="browser">Trình duyệt bạn dùng để đăng nhập Facebook <span class="required">*</span></label>
+        <select id="browser" name="browser">
+          {% for b in browsers %}
+          <option value="{{ b }}" {% if b == cookie_browser %}selected{% endif %}>
+            {{ b.title() }}
+          </option>
+          {% endfor %}
+        </select>
+        <small class="hint">
+          yt-dlp sẽ lấy cookie từ trình duyệt này để tải video private.
+          Đảm bảo bạn đã <strong>đăng nhập Facebook</strong> trên trình duyệt đó và <strong>đóng trình duyệt lại</strong> trước khi chạy.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="csv_file">File CSV <span class="required">*</span></label>
+        <div class="file-drop" id="fileDrop">
+          <span class="file-icon">📄</span>
+          <span class="file-label" id="fileLabel">Chọn hoặc kéo thả file .csv vào đây</span>
+          <input type="file" id="csv_file" name="csv_file" accept=".csv" required />
+        </div>
+        <small class="hint">
+          Cột bắt buộc: <code>source_url</code>, <code>created_at</code> &nbsp;|&nbsp;
+          Tuỳ chọn: <code>video_id</code>, <code>title</code>
+        </small>
+      </div>
+
+      <!-- CSV format mẫu -->
+      <details class="csv-example">
+        <summary>Xem format CSV mẫu</summary>
+        <pre class="csv-preview">video_id,title,source_url,created_at
+1,"Tên video 1","https://facebook.com/watch/?v=123456789","6/1/2026 10:30"
+2,"Tên video 2","https://www.facebook.com/share/v/AbCdEf/","6/2/2026 14:00"
+3,"Tên video 3","https://facebook.com/reel/987654321","6/3/2026 09:15"</pre>
+        <small class="hint">Không cần cột <code>direct_url</code> nữa — yt-dlp tự xử lý!</small>
+      </details>
+
+      <button type="submit" class="btn-primary" id="submitBtn">
+        <span class="btn-icon">⬇</span>
+        Lọc &amp; Tải Video
+      </button>
+    </form>
+  </section>
+
+  <!-- ── KẾT QUẢ ── -->
+  {% if results %}
+  <section class="card results-card">
+    <h2 class="card-title">
+      <span class="title-icon">📊</span>
+      Kết quả — {{ batch.date_range }}
+    </h2>
+
+    <div class="stats-row">
+      <div class="stat stat-total">
+        <span class="stat-num">{{ batch.total }}</span>
+        <span class="stat-label">Video lọc được</span>
+      </div>
+      <div class="stat stat-success">
+        <span class="stat-num">{{ batch.success }}</span>
+        <span class="stat-label">Tải thành công</span>
+      </div>
+      <div class="stat stat-failed">
+        <span class="stat-num">{{ batch.failed }}</span>
+        <span class="stat-label">Thất bại</span>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tiêu đề</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th>Thông tin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in results %}
+          <tr class="{{ 'row-success' if r.status == 'success' else 'row-failed' }}">
+            <td>{{ loop.index }}</td>
+            <td class="td-title">
+              {{ r.title }}
+              {% if r.source_url %}
+              <a href="{{ r.source_url }}" target="_blank" class="src-link" title="Mở link gốc">↗</a>
+              {% endif %}
+            </td>
+            <td class="td-date">{{ r.created_at }}</td>
+            <td>
+              {% if r.status == 'success' %}
+                <span class="badge badge-success">✓ Thành công</span>
+              {% else %}
+                <span class="badge badge-failed">✗ Thất bại</span>
+              {% endif %}
+            </td>
+            <td class="td-info">
+              {% if r.status == 'success' %}
+                <code class="path">{{ r.local_path }}</code>
+              {% else %}
+                <span class="error-msg">{{ r.error_message }}</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+</main>
+
+<footer class="footer">
+  <p>Dùng yt-dlp + cookie trình duyệt. Không lưu mật khẩu. Không scrape Facebook.</p>
+</footer>
+
+<script>
+  document.getElementById('csv_file').addEventListener('change', function () {
+    document.getElementById('fileLabel').textContent =
+      this.files[0] ? this.files[0].name : 'Chọn hoặc kéo thả file .csv vào đây';
+  });
+
+  document.querySelector('form').addEventListener('submit', function () {
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '⏳ Đang tải video... (có thể mất vài phút)';
+    btn.disabled = true;
+  });
+
+  const drop = document.getElementById('fileDrop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag-over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); drop.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      document.getElementById('csv_file').files = e.dataTransfer.files;
+      document.getElementById('fileLabel').textContent = file.name;
+    }
+  });
+</script>
+
+</body>
+</html>

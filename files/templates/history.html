@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lịch sử tải — FB Video Downloader</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">▶</span>
+    <span>FB Video Downloader</span>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link">Tải về</a>
+    <a href="/history" class="nav-link active">Lịch sử</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <section class="card">
+    <h2 class="card-title">
+      <span class="title-icon">🗂</span>
+      Lịch sử tải
+    </h2>
+
+    {% if not history %}
+      <div class="empty-state">
+        <p class="empty-icon">📭</p>
+        <p>Chưa có lịch sử tải nào.</p>
+        <a href="/" class="btn-primary" style="display:inline-block;margin-top:12px;">← Về trang tải</a>
+      </div>
+    {% else %}
+
+      <p class="history-count">Tổng cộng <strong>{{ history|length }}</strong> lần tải</p>
+
+      {% for batch in history %}
+      <details class="batch-block" {% if loop.first %}open{% endif %}>
+        <summary class="batch-summary">
+          <div class="batch-header">
+            <span class="batch-id">
+              🗓 {{ batch.created_at[:10] if batch.created_at else 'N/A' }}
+              &nbsp;|&nbsp;
+              {{ batch.date_range }}
+            </span>
+            <div class="batch-badges">
+              <span class="badge badge-total">{{ batch.total }} video</span>
+              <span class="badge badge-success">✓ {{ batch.success }}</span>
+              <span class="badge badge-failed">✗ {{ batch.failed }}</span>
+            </div>
+          </div>
+          {% if batch.source_profile_url %}
+          <div class="batch-source">
+            📌 Nguồn: <a href="{{ batch.source_profile_url }}" target="_blank" rel="noopener">
+              {{ batch.source_profile_url }}
+            </a>
+          </div>
+          {% endif %}
+        </summary>
+
+        <div class="batch-body">
+          <div class="table-wrap">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tiêu đề</th>
+                  <th>Ngày tạo</th>
+                  <th>Trạng thái</th>
+                  <th>Thông tin</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in batch.records %}
+                <tr class="{{ 'row-success' if r.status == 'success' else 'row-failed' }}">
+                  <td>{{ loop.index }}</td>
+                  <td class="td-title">{{ r.title }}</td>
+                  <td class="td-date">{{ r.created_at }}</td>
+                  <td>
+                    {% if r.status == 'success' %}
+                      <span class="badge badge-success">✓ Thành công</span>
+                    {% else %}
+                      <span class="badge badge-failed">✗ Thất bại</span>
+                    {% endif %}
+                  </td>
+                  <td class="td-info">
+                    {% if r.status == 'success' %}
+                      <code class="path">{{ r.local_path }}</code>
+                    {% else %}
+                      <span class="error-msg">{{ r.error_message }}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+      {% endfor %}
+
+    {% endif %}
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Chỉ tải video khi CSV có <code>direct_url</code> hợp lệ. Không tự động truy cập Facebook.</p>
+</footer>
+
+</body>
+</html>

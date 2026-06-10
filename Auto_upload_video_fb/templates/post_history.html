@@ -1,0 +1,122 @@
+{% extends "index.html" %}
+{% block content %}
+
+<h1>🕓 Lịch Sử Đăng Video</h1>
+<p class="subtitle">Danh sách tất cả video đã xử lý — mới nhất hiện trước</p>
+
+<div class="actions-row">
+  <a href="/post-videos" class="btn btn-primary">📤 Đăng video mới</a>
+  {% if history %}
+  <form method="post" action="/clear-history"
+        onsubmit="return confirm('Xóa toàn bộ lịch sử? Hành động này không thể hoàn tác.')">
+    <button type="submit" class="btn btn-danger btn-sm">🗑 Xóa lịch sử</button>
+  </form>
+  {% endif %}
+</div>
+
+{% if history %}
+
+<!-- Summary badges -->
+{% set pub = history | selectattr('status', 'equalto', 'published') | list | length %}
+{% set sched = history | selectattr('status', 'equalto', 'scheduled') | list | length %}
+{% set fail = history | selectattr('status', 'equalto', 'failed') | list | length %}
+
+<div class="stats-row">
+  <div class="stat-box stat-total">
+    <div class="num">{{ history | length }}</div>
+    <div class="label">Tổng bản ghi</div>
+  </div>
+  <div class="stat-box stat-ok">
+    <div class="num">{{ pub }}</div>
+    <div class="label">Đã đăng</div>
+  </div>
+  <div class="stat-box stat-sched">
+    <div class="num">{{ sched }}</div>
+    <div class="label">Đã hẹn lịch</div>
+  </div>
+  <div class="stat-box stat-err">
+    <div class="num">{{ fail }}</div>
+    <div class="label">Lỗi</div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>File</th>
+        <th>Title</th>
+        <th>Hashtag</th>
+        <th>Hẹn lịch</th>
+        <th>Trạng thái</th>
+        <th>Facebook Video ID</th>
+        <th>Đăng lúc</th>
+        <th>Lỗi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in history %}
+      <tr>
+        <td class="mono">{{ loop.index }}</td>
+        <td class="filename" title="{{ r.filename }}">{{ r.filename }}</td>
+        <td class="title-cell" title="{{ r.title }}">{{ r.title }}</td>
+        <td style="font-size:0.75rem; color:var(--muted); max-width:160px; word-break:break-word;">
+          {{ r.hashtag or '—' }}
+        </td>
+        <td class="mono" style="white-space:nowrap;">{{ r.scheduled_time or '—' }}</td>
+        <td>
+          {% if r.status == 'published' %}
+            <span class="badge badge-published">✓ published</span>
+          {% elif r.status == 'scheduled' %}
+            <span class="badge badge-scheduled">⏰ scheduled</span>
+          {% elif r.status == 'failed' %}
+            <span class="badge badge-failed">✗ failed</span>
+          {% elif r.status == 'uploading' %}
+            <span class="badge badge-uploading">↑ uploading</span>
+          {% else %}
+            <span class="badge badge-pending">· pending</span>
+          {% endif %}
+        </td>
+        <td class="mono">
+          {% if r.facebook_video_id %}
+            <a href="https://www.facebook.com/video/{{ r.facebook_video_id }}"
+               target="_blank" rel="noopener"
+               style="color:var(--accent); text-decoration:none; font-size:0.78rem;">
+              {{ r.facebook_video_id }}
+            </a>
+          {% else %}
+            <span style="color:var(--muted)">—</span>
+          {% endif %}
+        </td>
+        <td class="mono" style="white-space:nowrap; color:var(--muted); font-size:0.78rem;">
+          {{ r.posted_at or '—' }}
+        </td>
+        <td>
+          {% if r.error_message %}
+            <span class="err-text">{{ r.error_message }}</span>
+          {% else %}
+            <span style="color:var(--muted)">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% else %}
+
+<div class="empty-state">
+  <div class="icon">📭</div>
+  <p>Chưa có lịch sử đăng video nào.</p>
+  <p style="margin-top:0.5rem;">
+    <a href="/post-videos" class="btn btn-primary" style="margin-top:1rem;">
+      📤 Bắt đầu đăng video
+    </a>
+  </p>
+</div>
+
+{% endif %}
+
+{% endblock %}

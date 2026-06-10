@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facebook Video Tool</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header class="site-header">
+      <nav>
+        <a href="/post-videos" class="logo">
+          <span class="dot"></span> FB Video Tool
+        </a>
+        <a href="/post-videos" id="nav-post">📤 Đăng Video</a>
+        <a href="/post-history" id="nav-history">🕓 Lịch Sử</a>
+      </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    // Highlight active nav
+    const path = window.location.pathname;
+    if (path.startsWith('/post-history')) document.getElementById('nav-history').classList.add('active');
+    else document.getElementById('nav-post').classList.add('active');
+  </script>
+</body>
+</html>

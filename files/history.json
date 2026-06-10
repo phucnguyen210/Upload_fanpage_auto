@@ -1,0 +1,782 @@
+[
+  {
+    "batch_id": "20260605_162759",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 7,
+    "success": 7,
+    "failed": 0,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "Thi?u gia nhà giàu nh?t vùng vì mu?n ép tôi cúi ??u",
+        "source_url": "https://www.facebook.com/share/v/18ng9YYPdr/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:26:56.213166",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_Thi_u gia nhà giàu nh_t vùng vì mu_n ép tôi cúi __u.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Tôi mu?n t? ??i gia t?c t?nh Nam ph?i pha's?n toàn b? trong 3 phút.",
+        "source_url": "https://www.facebook.com/share/v/1PrcmthWNG/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:27:10.306367",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Tôi mu_n t_ __i gia t_c t_nh Nam ph_i pha's_n toàn b_ trong 3 phút.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "M?, ??ng làm n?a.",
+        "source_url": "https://www.facebook.com/share/v/1c4GZmup5j/",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:27:22.571138",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\3_M_, __ng làm n_a.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "4",
+        "title": "M?t cô mu` à R?t cu?c cô có ý gì",
+        "source_url": "https://www.facebook.com/share/v/1BafKmDxyy/",
+        "created_at": "6/4/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:27:29.708200",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\4_M_t cô mu` à R_t cu_c cô có ý gì.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "5",
+        "title": "B?o v? con ?i n?u c?m ?i,",
+        "source_url": "https://www.facebook.com/share/v/1Dwu2zGkEa/",
+        "created_at": "6/5/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:27:36.698102",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\5_B_o v_ con _i n_u c_m _i,.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "6",
+        "title": "Chuy?n ??n c?c Dân Chính d?i sang tu?n sau nhé. ???c.",
+        "source_url": "https://www.facebook.com/share/v/1BZFHMaQBE/",
+        "created_at": "6/5/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:27:44.304532",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\6_Chuy_n __n c_c Dân Chính d_i sang tu_n sau nhé. ___c.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "7",
+        "title": "Th?c Nghi, cô thái ?? gì v?y",
+        "source_url": "https://www.facebook.com/share/v/1GYvqtcFn1/",
+        "created_at": "6/5/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:27:53.281006",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\7_Th_c Nghi, cô thái __ gì v_y.mp4",
+        "error_message": ""
+      }
+    ],
+    "created_at": "2026-06-05T16:27:59.316359"
+  },
+  {
+    "batch_id": "20260605_161900",
+    "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 5,
+    "success": 5,
+    "failed": 0,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "Ch?ng còn ?ang lo phát tri?n s? nghi?p, nào ng? ng??i ph? n? bên c?nh ?ã chu?n b? s?n cái b?y dành cho anh.",
+        "source_url": "https://www.facebook.com/share/v/193P3ysNAd/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:18:18.899987",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_Ch_ng còn _ang lo phát tri_n s_ nghi_p, nào ng_ ng__i ph_ n_ bên c_nh _ã chu_n.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Ng??i bán t??ng ??y ???c ??ng ?? c? vô d?ng, nào ng? cô gái l?i dùng chúng ?? b?t ??u con ???ng làm giàu.",
+        "source_url": "https://www.facebook.com/share/v/1B1G8BBkxt/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:18:25.930987",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Ng__i bán t__ng __y ___c __ng __ c_ vô d_ng, nào ng_ cô gái l_i dùng chúng __ .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "Cô gái không c?n xe t?i hay kho ch?a, b?i cô có th? c?t c? núi vàng vào không gian riêng c?a mình.",
+        "source_url": "https://www.facebook.com/share/v/1CshxH4nDp/",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:18:33.458690",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\3_Cô gái không c_n xe t_i hay kho ch_a, b_i cô có th_ c_t c_ núi vàng vào không .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "4",
+        "title": "Ng??i ph? n? còn ch?a ph?i v? ch? t?ch ?ã t? xem mình là bà ch?, nào ng? l?n này ??ng nh?m ng??i.",
+        "source_url": "https://www.facebook.com/share/v/1DxcGiB1nY/",
+        "created_at": "6/4/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:18:40.747600",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\4_Ng__i ph_ n_ còn ch_a ph_i v_ ch_ t_ch _ã t_ xem mình là bà ch_, nào ng_ l_n n.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "5",
+        "title": "M?t mình chàng trai không th? lo n?i container 10 t?n, nh?ng khi anh em tài x? chung tay thì m?i chuy?n ?ã khác.",
+        "source_url": "https://www.facebook.com/share/v/18keFqj7t9/",
+        "created_at": "6/5/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:18:51.052216",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\5_M_t mình chàng trai không th_ lo n_i container 10 t_n, nh_ng khi anh em tài x_.mp4",
+        "error_message": ""
+      }
+    ],
+    "created_at": "2026-06-05T16:19:00.093511"
+  },
+  {
+    "batch_id": "20260605_161757",
+    "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 5,
+    "success": 5,
+    "failed": 0,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "Ch?ng còn ?ang lo phát tri?n s? nghi?p, nào ng? ng??i ph? n? bên c?nh ?ã chu?n b? s?n cái b?y dành cho anh.",
+        "source_url": "https://www.facebook.com/share/v/193P3ysNAd/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:16:50.677270",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_Ch_ng còn _ang lo phát tri_n s_ nghi_p, nào ng_ ng__i ph_ n_ bên c_nh _ã chu_n.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Ng??i bán t??ng ??y ???c ??ng ?? c? vô d?ng, nào ng? cô gái l?i dùng chúng ?? b?t ??u con ???ng làm giàu.",
+        "source_url": "https://www.facebook.com/share/v/1B1G8BBkxt/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:17:07.469268",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Ng__i bán t__ng __y ___c __ng __ c_ vô d_ng, nào ng_ cô gái l_i dùng chúng __ .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "Cô gái không c?n xe t?i hay kho ch?a, b?i cô có th? c?t c? núi vàng vào không gian riêng c?a mình.",
+        "source_url": "https://www.facebook.com/share/v/1CshxH4nDp/",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:17:15.234924",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\3_Cô gái không c_n xe t_i hay kho ch_a, b_i cô có th_ c_t c_ núi vàng vào không .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "4",
+        "title": "Ng??i ph? n? còn ch?a ph?i v? ch? t?ch ?ã t? xem mình là bà ch?, nào ng? l?n này ??ng nh?m ng??i.",
+        "source_url": "https://www.facebook.com/share/v/1DxcGiB1nY/",
+        "created_at": "6/4/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:17:35.816037",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\4_Ng__i ph_ n_ còn ch_a ph_i v_ ch_ t_ch _ã t_ xem mình là bà ch_, nào ng_ l_n n.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "5",
+        "title": "M?t mình chàng trai không th? lo n?i container 10 t?n, nh?ng khi anh em tài x? chung tay thì m?i chuy?n ?ã khác.",
+        "source_url": "https://www.facebook.com/share/v/18keFqj7t9/",
+        "created_at": "6/5/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/BeautysalonMOOii",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T16:17:49.679875",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\5_M_t mình chàng trai không th_ lo n_i container 10 t_n, nh_ng khi anh em tài x_.mp4",
+        "error_message": ""
+      }
+    ],
+    "created_at": "2026-06-05T16:17:57.961919"
+  },
+  {
+    "batch_id": "20260605_130955",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 5,
+    "success": 5,
+    "failed": 0,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "T?ng tài gi? nghèo ?? th? lòng hôn thê t??ng cô s? ch?y m?t dép ai ng? cô l?i mu?n bao nuôi mình !",
+        "source_url": "https://www.facebook.com/share/v/1Bbo6YSVbB/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:09:10.181357",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_T_ng tài gi_ nghèo __ th_ lòng hôn thê t__ng cô s_ ch_y m_t dép ai ng_ cô l_i .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Tra nam ngu mu?i vì ? trà xanh tâm c? mà t? tay ?ánh m?t ?i ng??i mình yêu nh?t !",
+        "source_url": "https://www.facebook.com/share/v/1Mcp2v8aS7/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:09:19.858145",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Tra nam ngu mu_i vì _ trà xanh tâm c_ mà t_ tay _ánh m_t _i ng__i mình yêu nh_.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "Trà xanh không ng?ng khiêu khích mình nh?ng hôn phu l?i ra s?c che ch? ? n? t?ng tài quy?t không nh??ng b? quay ??u g? cho ??i gia bí ?n !",
+        "source_url": "https://www.facebook.com/share/v/18x9b9aHvY/",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:09:29.025470",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\3_Trà xanh không ng_ng khiêu khích mình nh_ng hôn phu l_i ra s_c che ch_ _ n_ t_.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "4",
+        "title": "Trà xanh m?u mô vì ?? k? m?i ngày ??u tìm cách b?t ch??c hôn thê c?a b?n thân khác gi?i gây th? phi chia r? !",
+        "source_url": "https://www.facebook.com/share/v/17BvTnt3EU/",
+        "created_at": "6/4/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:09:37.931191",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\4_Trà xanh m_u mô vì __ k_ m_i ngày __u tìm cách b_t ch__c hôn thê c_a b_n thân .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "5",
+        "title": "B?t ng? nghe ???c ti?ng lòng c?a ??a con m?i sinh cô gái quy?t tâm thay ??i s? ph?n l?t m?t ? b?n thân tâm c? !",
+        "source_url": "https://www.facebook.com/share/v/17znYDgQqJ/",
+        "created_at": "6/5/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:09:46.313479",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\5_B_t ng_ nghe ___c ti_ng lòng c_a __a con m_i sinh cô gái quy_t tâm thay __i s_.mp4",
+        "error_message": ""
+      }
+    ],
+    "created_at": "2026-06-05T13:09:55.287286"
+  },
+  {
+    "batch_id": "20260605_130836",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 3,
+    "success": 3,
+    "failed": 0,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "T?ng tài gi? nghèo ?? th? lòng hôn thê t??ng cô s? ch?y m?t dép ai ng? cô l?i mu?n bao nuôi mình !",
+        "source_url": "https://www.facebook.com/share/v/1Bbo6YSVbB/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:08:05.742744",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_T_ng tài gi_ nghèo __ th_ lòng hôn thê t__ng cô s_ ch_y m_t dép ai ng_ cô l_i .mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Tra nam ngu mu?i vì ? trà xanh tâm c? mà t? tay ?ánh m?t ?i ng??i mình yêu nh?t !",
+        "source_url": "https://www.facebook.com/share/v/1Mcp2v8aS7/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:08:15.715873",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Tra nam ngu mu_i vì _ trà xanh tâm c_ mà t_ tay _ánh m_t _i ng__i mình yêu nh_.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "Trà xanh không ng?ng khiêu khích mình nh?ng hôn phu l?i ra s?c che ch? ? n? t?ng tài quy?t không nh??ng b? quay ??u g? cho ??i gia bí ?n !",
+        "source_url": "https://www.facebook.com/share/v/18x9b9aHvY/",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T13:08:27.502725",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\3_Trà xanh không ng_ng khiêu khích mình nh_ng hôn phu l_i ra s_c che ch_ _ n_ t_.mp4",
+        "error_message": ""
+      }
+    ],
+    "created_at": "2026-06-05T13:08:36.521711"
+  },
+  {
+    "batch_id": "20260605_122751",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 3,
+    "success": 2,
+    "failed": 1,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "M?, ??ng làm n?a.",
+        "source_url": "https://www.facebook.com/reel/877125471401136",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:27:37.639624",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_M_, __ng làm n_a.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Video test 2",
+        "source_url": "https://www.facebook.com/share/v/1C18fYW9Sy/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:27:41.915104",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Video test 2.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "Video test 3",
+        "source_url": "https://www.facebook.com/reel/987654321",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:27:46.984749",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: [facebook] 987654321: Cannot parse data; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U"
+      }
+    ],
+    "created_at": "2026-06-05T12:27:51.312328"
+  },
+  {
+    "batch_id": "20260605_122703",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 3,
+    "success": 2,
+    "failed": 1,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "M?, ??ng làm n?a.",
+        "source_url": "https://www.facebook.com/reel/877125471401136",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:26:43.693227",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\1_M_, __ng làm n_a.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "2",
+        "title": "Video test 2",
+        "source_url": "https://www.facebook.com/share/v/1C18fYW9Sy/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:26:51.600569",
+        "status": "success",
+        "local_path": "downloads\\2026-06-05\\2_Video test 2.mp4",
+        "error_message": ""
+      },
+      {
+        "video_id": "3",
+        "title": "Video test 3",
+        "source_url": "https://www.facebook.com/reel/987654321",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:26:59.206775",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: [facebook] 987654321: Cannot parse data; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U"
+      }
+    ],
+    "created_at": "2026-06-05T12:27:03.288621"
+  },
+  {
+    "batch_id": "20260605_122440",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "firefox",
+    "total": 3,
+    "success": 0,
+    "failed": 3,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "Video test 1",
+        "source_url": "https://www.facebook.com/watch/?v=123456789",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:24:24.164349",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: [facebook] 123456789: Cannot parse data; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U"
+      },
+      {
+        "video_id": "2",
+        "title": "Video test 2",
+        "source_url": "https://www.facebook.com/share/v/AbCdEfGh/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:24:28.902980",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "URL không được hỗ trợ. Kiểm tra lại source_url."
+      },
+      {
+        "video_id": "3",
+        "title": "Video test 3",
+        "source_url": "https://www.facebook.com/reel/987654321",
+        "created_at": "6/3/2026 09:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "firefox",
+        "downloaded_at": "2026-06-05T12:24:35.803765",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: [facebook] 987654321: Cannot parse data; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U"
+      }
+    ],
+    "created_at": "2026-06-05T12:24:40.414483"
+  },
+  {
+    "batch_id": "20260605_122055",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "chrome",
+    "total": 3,
+    "success": 0,
+    "failed": 3,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "Video test 1",
+        "source_url": "https://www.facebook.com/watch/?v=123456789",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:20:51.985040",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info\nERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info"
+      },
+      {
+        "video_id": "2",
+        "title": "Video test 2",
+        "source_url": "https://www.facebook.com/share/v/AbCdEfGh/",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:20:53.186071",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info\nERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info"
+      },
+      {
+        "video_id": "3",
+        "title": "Video test 3",
+        "source_url": "https://www.facebook.com/reel/987654321",
+        "created_at": "6/3/2026 09:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:20:54.633867",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info\nERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info"
+      }
+    ],
+    "created_at": "2026-06-05T12:20:55.714210"
+  },
+  {
+    "batch_id": "20260605_121759",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "edge",
+    "total": 5,
+    "success": 0,
+    "failed": 5,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "M?t cô mu` à R?t cu?c cô có ý gì",
+        "source_url": "https://www.facebook.com/share/v/18njZ2KRpA/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "edge",
+        "downloaded_at": "2026-06-05T12:17:57.364279",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info\nERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info"
+      },
+      {
+        "video_id": "2",
+        "title": "video_2",
+        "source_url": "",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "edge",
+        "downloaded_at": "2026-06-05T12:17:59.798140",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "3",
+        "title": "video_3",
+        "source_url": "",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "edge",
+        "downloaded_at": "2026-06-05T12:17:59.798140",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "4",
+        "title": "video_4",
+        "source_url": "",
+        "created_at": "6/4/2026 16:45",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "edge",
+        "downloaded_at": "2026-06-05T12:17:59.798140",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "6",
+        "title": "video_6",
+        "source_url": "",
+        "created_at": "6/5/2026 8:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "edge",
+        "downloaded_at": "2026-06-05T12:17:59.798140",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      }
+    ],
+    "created_at": "2026-06-05T12:17:59.814083"
+  },
+  {
+    "batch_id": "20260605_121740",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "chrome",
+    "total": 5,
+    "success": 0,
+    "failed": 5,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "M?t cô mu` à R?t cu?c cô có ý gì",
+        "source_url": "https://www.facebook.com/share/v/18njZ2KRpA/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:38.524003",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info\nERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info"
+      },
+      {
+        "video_id": "2",
+        "title": "video_2",
+        "source_url": "",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:40.061467",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "3",
+        "title": "video_3",
+        "source_url": "",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:40.061467",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "4",
+        "title": "video_4",
+        "source_url": "",
+        "created_at": "6/4/2026 16:45",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:40.061467",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "6",
+        "title": "video_6",
+        "source_url": "",
+        "created_at": "6/5/2026 8:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:40.061467",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      }
+    ],
+    "created_at": "2026-06-05T12:17:40.075835"
+  },
+  {
+    "batch_id": "20260605_121703",
+    "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+    "date_range": "2026-06-01 → 2026-06-05",
+    "csv_filename": "sample_videos.csv",
+    "browser": "chrome",
+    "total": 5,
+    "success": 0,
+    "failed": 5,
+    "records": [
+      {
+        "video_id": "1",
+        "title": "M?t cô mu` à R?t cu?c cô có ý gì",
+        "source_url": "https://www.facebook.com/share/v/18njZ2KRpA/",
+        "created_at": "6/1/2026 10:30",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:01.353202",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "ERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info\nERROR: Could not copy Chrome cookie database. See  https://github.com/yt-dlp/yt-dlp/issues/7271  for more info"
+      },
+      {
+        "video_id": "2",
+        "title": "video_2",
+        "source_url": "",
+        "created_at": "6/2/2026 14:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:03.249645",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "3",
+        "title": "video_3",
+        "source_url": "",
+        "created_at": "6/3/2026 9:15",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:03.249645",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "4",
+        "title": "video_4",
+        "source_url": "",
+        "created_at": "6/4/2026 16:45",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:03.249645",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      },
+      {
+        "video_id": "6",
+        "title": "video_6",
+        "source_url": "",
+        "created_at": "6/5/2026 8:00",
+        "source_profile_url": "https://www.facebook.com/profile.php?id=100090565161284",
+        "browser": "chrome",
+        "downloaded_at": "2026-06-05T12:17:03.249645",
+        "status": "failed",
+        "local_path": "",
+        "error_message": "source_url trống hoặc không hợp lệ."
+      }
+    ],
+    "created_at": "2026-06-05T12:17:03.249645"
+  }
+]
