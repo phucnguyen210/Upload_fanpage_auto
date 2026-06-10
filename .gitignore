@@ -2,3 +2,17 @@ Auto_upload_video_fb/videos/
 *.mp4
 data/downloads
 *.mp4
+venv/
+*/venv/
+__pycache__/
+*/__pycache__/
+*.pyc
+.env
+*.log
+data/*.sqlite3
+data/*.sqlite
+data/*.db
+~$*.xlsx
+dist/
+build/
+*.spec
