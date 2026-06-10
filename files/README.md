@@ -13,7 +13,8 @@ Web app chạy local để **lọc và tải video** từ file CSV có `direct_u
 - ✅ Chỉ tải khi CSV có `direct_url` bắt đầu bằng `http`
 
 ---
-
+cd D:\Workspcae\MMO\DownVidFB\Auto_upload_video_fb
+venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8001
 ## 📁 Cấu trúc project
 
 ```

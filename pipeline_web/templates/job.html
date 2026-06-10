@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipeline Job</title>
+  <link rel="stylesheet" href="/static/pipeline.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>{{ job.type|title }} Progress</h1>
+      <p>Job {{ job_id }}</p>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="job-card">
+      <div class="job-head">
+        <div>
+          <span class="label">Status</span>
+          <strong id="status">{{ job.status }}</strong>
+        </div>
+        <div>
+          <span class="label">Started</span>
+          <strong>{{ job.created_at }}</strong>
+        </div>
+        <div>
+          <span class="label">Finished</span>
+          <strong id="finished">{{ job.finished_at or "-" }}</strong>
+        </div>
+      </div>
+      <div class="progress-line">
+        <div id="progressBar"></div>
+      </div>
+      <pre id="resultBox" class="result-box"></pre>
+      <div class="job-actions">
+        <a href="/">Back to Dashboard</a>
+        <span id="hintText"></span>
+      </div>
+    </section>
+
+    <section class="log-panel">
+      <div class="section-head">
+        <h2>Live Log</h2>
+        <span id="logCount">0 lines</span>
+      </div>
+      <div id="logs" class="logs"></div>
+    </section>
+  </main>
+
+  <script>
+    const jobId = "{{ job_id }}";
+    const logsEl = document.getElementById("logs");
+    const statusEl = document.getElementById("status");
+    const finishedEl = document.getElementById("finished");
+    const logCountEl = document.getElementById("logCount");
+    const progressBar = document.getElementById("progressBar");
+    const resultBox = document.getElementById("resultBox");
+    const hintText = document.getElementById("hintText");
+    let timer = null;
+
+    function render(job) {
+      statusEl.textContent = job.status;
+      finishedEl.textContent = job.finished_at || "-";
+      logsEl.innerHTML = "";
+
+      let doneItems = 0;
+      let totalItems = 0;
+
+      (job.logs || []).forEach((line) => {
+        const div = document.createElement("div");
+        div.className = "log-row " + line.event;
+        div.textContent = `[${line.time}] ${line.message}`;
+        logsEl.appendChild(div);
+
+        if (line.payload && line.payload.total) totalItems = line.payload.total;
+        if (["item_done", "item_error"].includes(line.event)) doneItems++;
+      });
+
+      logCountEl.textContent = (job.logs || []).length + " lines";
+      if (totalItems > 0) {
+        progressBar.style.width = Math.min(100, Math.round(doneItems / totalItems * 100)) + "%";
+      }
+
+      if (job.result) {
+        resultBox.textContent = JSON.stringify(job.result, null, 2);
+        if (job.result.dry_run) {
+          hintText.textContent = "Dry run was ON, so no real action was performed. Go back and uncheck Dry run to run for real.";
+        } else if (job.type === "publish") {
+          hintText.textContent = "Publish results appear in the Dashboard table under Publish and Post ID.";
+        } else {
+          hintText.textContent = "Downloaded files appear in the Dashboard table under Local File.";
+        }
+      } else if (job.error) {
+        resultBox.textContent = job.error;
+      }
+
+      logsEl.scrollTop = logsEl.scrollHeight;
+      if (["done", "failed", "missing"].includes(job.status) && timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    async function tick() {
+      const response = await fetch(`/jobs/${jobId}/status`);
+      const data = await response.json();
+      render(data);
+    }
+
+    tick();
+    timer = setInterval(tick, 1000);
+  </script>
+</body>
+</html>

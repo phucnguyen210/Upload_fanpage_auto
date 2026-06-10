@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Pipeline</title>
+  <link rel="stylesheet" href="/static/pipeline.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Video Pipeline</h1>
+      <p>{{ db_path }}</p>
+    </div>
+    <nav>
+      <a href="/">Refresh</a>
+      <a href="http://127.0.0.1:8000" target="_blank">Downloader cũ</a>
+      <a href="http://127.0.0.1:8001/post-videos" target="_blank">Publisher cũ</a>
+    </nav>
+  </header>
+
+  <main>
+    {% if message %}
+    <div class="notice success">{{ message }}</div>
+    {% endif %}
+    {% if error %}
+    <div class="notice error">{{ error }}</div>
+    {% endif %}
+
+    <section class="stats">
+      <div class="stat">
+        <span class="label">Total</span>
+        <strong>{{ stats.total }}</strong>
+      </div>
+      <div class="stat">
+        <span class="label">Need Download</span>
+        <strong>{{ stats.pending_download }}</strong>
+      </div>
+      <div class="stat">
+        <span class="label">Need Publish</span>
+        <strong>{{ stats.pending_publish }}</strong>
+      </div>
+      <div class="stat">
+        <span class="label">Downloaded</span>
+        <strong>{{ stats.download.get("downloaded", 0) }}</strong>
+      </div>
+      <div class="stat">
+        <span class="label">Scheduled</span>
+        <strong>{{ stats.publish.get("scheduled", 0) }}</strong>
+      </div>
+    </section>
+
+    <section class="actions">
+      <form action="/import-excel" method="post" enctype="multipart/form-data">
+        <h2>Import Excel/CSV</h2>
+        <label>File nguồn</label>
+        <input type="file" name="import_file" accept=".csv,.xlsx" required>
+        <button type="submit">Import</button>
+      </form>
+
+      <form action="/download-pending" method="post">
+        <h2>Download Pending</h2>
+        <p class="form-note">Bấm chạy sẽ chuyển sang trang log. Tick Dry run nếu chỉ muốn xem thử, bỏ tick để tải thật vào <code>data/downloads/YYYY-MM-DD/</code>.</p>
+        <label>Limit</label>
+        <input type="number" name="limit" value="10" min="1">
+        <label>Browser cookie</label>
+        <select name="browser">
+          <option value="chrome">Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="edge">Edge</option>
+          <option value="brave">Brave</option>
+        </select>
+        <label>Output dir</label>
+        <input type="text" name="output_dir" value="data/downloads">
+        <label class="check"><input type="checkbox" name="dry_run"> Dry run</label>
+        <button type="submit">Run Download</button>
+      </form>
+
+      <form action="/generate-schedule" method="post">
+        <h2>Generate Schedule</h2>
+        <label>Start time</label>
+        <input type="text" name="start_time" placeholder="2026-06-11 08:00:00">
+        <label>Interval minutes</label>
+        <input type="number" name="interval_minutes" value="60" min="1">
+        <label>Limit</label>
+        <input type="number" name="limit" value="50" min="1">
+        <label class="check"><input type="checkbox" name="dry_run"> Dry run</label>
+        <button type="submit">Generate</button>
+      </form>
+
+      <form action="/publish-pending" method="post">
+        <h2>Publish Pending</h2>
+        <p class="form-note">Dry run chỉ kiểm tra danh sách. Bỏ tick mới gửi video lên Facebook.</p>
+        <label>Limit</label>
+        <input type="number" name="limit" value="10" min="1">
+        <label>Page ID</label>
+        <input type="text" name="page_id" autocomplete="off">
+        <label>Page Access Token</label>
+        <input type="password" name="page_access_token" autocomplete="off">
+        <label class="check"><input type="checkbox" name="dry_run" checked> Dry run</label>
+        <button type="submit">Run Publish</button>
+      </form>
+    </section>
+
+    <section class="jobs-section">
+      <div class="section-head">
+        <h2>Recent Jobs</h2>
+        <span>{{ jobs|length }} jobs</span>
+      </div>
+      {% if jobs %}
+      <div class="jobs-list">
+        {% for job in jobs %}
+        <a class="job-item {{ job.status }}" href="/jobs/{{ job.id }}">
+          <div>
+            <strong>{{ job.type|title }} - {{ job.status }}</strong>
+            <span>{{ job.created_at }}{% if job.finished_at %} -> {{ job.finished_at }}{% endif %}</span>
+          </div>
+          {% if job.result %}
+          <code>
+            total={{ job.result.total }},
+            {% if job.type == "download" %}
+            downloaded={{ job.result.downloaded }},
+            {% elif job.type == "publish" %}
+            scheduled={{ job.result.scheduled }}, published={{ job.result.published }},
+            {% endif %}
+            failed={{ job.result.failed }},
+            dry_run={{ job.result.dry_run }}
+          </code>
+          {% elif job.error %}
+          <code>{{ job.error }}</code>
+          {% else %}
+          <code>running...</code>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-jobs">Chưa có job nào trong phiên chạy app hiện tại.</div>
+      {% endif %}
+    </section>
+
+    <section class="table-section">
+      <div class="section-head">
+        <div>
+          <h2>Videos</h2>
+          <div class="tabs">
+            <a class="{{ 'active' if view == 'action' else '' }}" href="/?view=action">Cần xử lý</a>
+            <a class="{{ 'active' if view == 'need_download' else '' }}" href="/?view=need_download">Cần tải</a>
+            <a class="{{ 'active' if view == 'downloaded' else '' }}" href="/?view=downloaded">Đã tải</a>
+            <a class="{{ 'active' if view == 'need_publish' else '' }}" href="/?view=need_publish">Cần đăng</a>
+            <a class="{{ 'active' if view == 'failed' else '' }}" href="/?view=failed">Lỗi</a>
+            <a class="{{ 'active' if view == 'mock' else '' }}" href="/?view=mock">Mock/test</a>
+            <a class="{{ 'active' if view == 'all' else '' }}" href="/?view=all">Tất cả</a>
+          </div>
+        </div>
+        <span>{{ videos|length }} rows</span>
+      </div>
+      <details class="cleanup-box">
+        <summary>Dọn dữ liệu test/cũ</summary>
+        <form action="/cleanup" method="post" class="cleanup-form">
+          <label>Nhóm cần xóa</label>
+          <select name="view">
+            <option value="mock">Mock/test scanner</option>
+            <option value="empty_source">Dòng đăng video cũ không có source_url</option>
+            <option value="failed">Dòng lỗi</option>
+            <option value="all">Toàn bộ database</option>
+          </select>
+          <label>Gõ DELETE để xác nhận</label>
+          <input type="text" name="confirm" placeholder="DELETE">
+          <button type="submit">Xóa nhóm này</button>
+        </form>
+      </details>
+      <form action="/delete-selected" method="post" class="table-form" id="videoTableForm">
+        <div class="bulk-actions">
+          <label class="check"><input type="checkbox" id="checkAll"> Chọn tất cả dòng đang hiển thị</label>
+          <input type="text" name="confirm" placeholder="Gõ DELETE để xóa dòng đã chọn">
+          <button type="submit">Xóa dòng đã chọn</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Source</th>
+                <th>Created</th>
+                <th>Local File</th>
+                <th>Download</th>
+                <th>Schedule</th>
+                <th>Publish</th>
+                <th>Post ID</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for v in videos %}
+              <tr>
+                <td><input type="checkbox" name="video_ids" value="{{ v.id }}" class="row-check"></td>
+                <td class="mono">{{ v.id }}</td>
+                <td class="title {{ 'title-warning' if '?' in (v.title_rewrite or v.title_original or '') or 'Ã' in (v.title_rewrite or v.title_original or '') else '' }}" title="{{ v.title_original }}">
+                  {{ v.title_rewrite or v.title_original or "-" }}
+                  {% if '?' in (v.title_rewrite or v.title_original or '') or 'Ã' in (v.title_rewrite or v.title_original or '') %}
+                  <span class="warn-text">Cần sửa title</span>
+                  {% endif %}
+                </td>
+                <td class="source">
+                  {% if v.source_url %}
+                  <a href="{{ v.source_url }}" target="_blank">{{ v.source_video_id or "open" }}</a>
+                  {% else %}
+                  -
+                  {% endif %}
+                </td>
+                <td class="mono">{{ v.created_at or "-" }}</td>
+                <td class="path" title="{{ v.local_filename }}">
+                  {% if v.local_filename %}
+                  <a href="/videos/{{ v.id }}/file" target="_blank">{{ v.local_filename }}</a>
+                  {% else %}
+                  -
+                  {% endif %}
+                </td>
+                <td><span class="badge {{ v.download_status }}">{{ v.download_status }}</span></td>
+                <td class="mono">{{ v.schedule_time or "-" }}</td>
+                <td><span class="badge {{ v.publish_status }}">{{ v.publish_status }}</span></td>
+                <td class="mono">{{ v.fb_post_id or "-" }}</td>
+                <td class="err" title="{{ v.error_message }}">{{ v.error_message or "-" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script>
+    const checkAll = document.getElementById("checkAll");
+    if (checkAll) {
+      checkAll.addEventListener("change", function () {
+        document.querySelectorAll(".row-check").forEach((item) => {
+          item.checked = checkAll.checked;
+        });
+      });
+    }
+  </script>
+</body>
+</html>
