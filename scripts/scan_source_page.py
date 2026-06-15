@@ -10,7 +10,9 @@ if str(ROOT_DIR) not in sys.path:
 from pipeline_core.db import DEFAULT_DB_PATH, init_db
 from pipeline_core.scanner import (
     MockFanpageScanner,
+    PlaywrightFacebookScanner,
     ScanInput,
+    YtDlpFacebookScanner,
     parse_scan_date,
     scan_and_store,
 )
@@ -22,12 +24,13 @@ def main() -> None:
     parser.add_argument("--date-from", required=True, help="Start date, format YYYY-MM-DD.")
     parser.add_argument("--date-to", required=True, help="End date, format YYYY-MM-DD.")
     parser.add_argument("--limit", type=int, default=None, help="Optional maximum number of videos.")
+    parser.add_argument("--browser", default="chrome", help="Browser cookie source for yt-dlp.")
     parser.add_argument("--db", default=str(DEFAULT_DB_PATH), help="SQLite database path.")
     parser.add_argument(
         "--scanner",
-        default="mock",
-        choices=["mock"],
-        help="Scanner backend. Only mock is available until Facebook API permissions are configured.",
+        default="browser",
+        choices=["browser", "yt-dlp", "mock"],
+        help="Scanner backend.",
     )
     args = parser.parse_args()
 
@@ -44,7 +47,12 @@ def main() -> None:
         limit=args.limit,
     )
 
-    scanner = MockFanpageScanner()
+    if args.scanner == "mock":
+        scanner = MockFanpageScanner()
+    elif args.scanner == "browser":
+        scanner = PlaywrightFacebookScanner()
+    else:
+        scanner = YtDlpFacebookScanner(browser=args.browser)
     summary = scan_and_store(scanner, scan_input, db_path=args.db)
     print(
         "Scan complete: "

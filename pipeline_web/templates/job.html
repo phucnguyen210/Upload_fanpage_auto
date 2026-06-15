@@ -90,8 +90,16 @@
         resultBox.textContent = JSON.stringify(job.result, null, 2);
         if (job.result.dry_run) {
           hintText.textContent = "Dry run was ON, so no real action was performed. Go back and uncheck Dry run to run for real.";
+        } else if (job.type === "scan") {
+          if ((job.result.discovered || 0) === 0) {
+            hintText.textContent = "Scan found no videos. Try the profile Videos/Reels tab URL, check browser login cookies, or use Mock/test to verify the pipeline.";
+          } else {
+            hintText.textContent = "Discovered videos appear in the Dashboard under Can tai / Need Download.";
+          }
         } else if (job.type === "publish") {
           hintText.textContent = "Publish results appear in the Dashboard table under Publish and Post ID.";
+        } else if (job.type === "title") {
+          hintText.textContent = "Updated titles appear in the Dashboard table under Title.";
         } else {
           hintText.textContent = "Downloaded files appear in the Dashboard table under Local File.";
         }

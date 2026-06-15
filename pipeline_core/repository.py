@@ -216,6 +216,27 @@ def find_video_by_source(
     return None
 
 
+def update_video_fields(
+    video_id: int,
+    fields: dict,
+    db_path: str | Path = DEFAULT_DB_PATH,
+) -> None:
+    if not fields:
+        return
+
+    init_db(db_path)
+    allowed = set(UPSERT_COLUMNS)
+    clean = {key: value for key, value in fields.items() if key in allowed}
+    if not clean:
+        return
+
+    assignments = ", ".join(f"{key} = :{key}" for key in clean)
+    params = {**clean, "id": video_id}
+    with get_connection(db_path) as conn:
+        conn.execute(f"UPDATE videos SET {assignments} WHERE id = :id", params)
+        conn.commit()
+
+
 def _drop_conflicting_source_video_id(values: dict, db_path: str | Path) -> dict:
     source_url = values.get("source_url", "")
     source_video_id = values.get("source_video_id", "")

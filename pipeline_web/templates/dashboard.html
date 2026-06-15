@@ -51,6 +51,32 @@
     </section>
 
     <section class="actions">
+      <form action="/scan-source" method="post">
+        <h2>Scan Facebook Source</h2>
+        <p class="form-note">Nhap link profile/page va khoang ngay. Buoc nay chi luu metadata vao database, chua tai video.</p>
+        <label>Source profile/page URL</label>
+        <input type="url" name="source_page_url" placeholder="https://www.facebook.com/page-or-profile" required>
+        <label>Date from</label>
+        <input type="date" name="date_from" required>
+        <label>Date to</label>
+        <input type="date" name="date_to" required>
+        <label>Limit optional</label>
+        <input type="number" name="limit" min="1" placeholder="De trong neu khong gioi han">
+        <label>Scanner backend</label>
+        <select name="scanner_backend">
+          <option value="browser">Browser automation</option>
+          <option value="yt-dlp">yt-dlp metadata</option>
+          <option value="mock">Mock/test</option>
+        </select>
+        <label>Browser cookie</label>
+        <select name="browser">
+          <option value="chrome">Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="edge">Edge</option>
+          <option value="brave">Brave</option>
+        </select>
+        <button type="submit">Run Scan</button>
+      </form>
       <form action="/import-excel" method="post" enctype="multipart/form-data">
         <h2>Import Excel/CSV</h2>
         <label>File nguồn</label>
@@ -58,6 +84,16 @@
         <button type="submit">Import</button>
       </form>
 
+      <form action="/sync-douyin-finals" method="post">
+        <h2>Sync Douyin Finals</h2>
+        <p class="form-note">Kéo video đã xử lý xong từ Douyin DB sang danh sách đăng Facebook. Chỉ lấy các dòng đã có final_video_path.</p>
+        <label>Douyin DB path</label>
+        <input type="text" name="douyin_db_path" value="{{ douyin_db_path }}">
+        <label>Limit</label>
+        <input type="number" name="limit" value="100" min="1">
+        <label class="check"><input type="checkbox" name="dry_run" checked> Dry run</label>
+        <button type="submit">Sync Finals</button>
+      </form>
       <form action="/download-pending" method="post">
         <h2>Download Pending</h2>
         <p class="form-note">Bấm chạy sẽ chuyển sang trang log. Tick Dry run nếu chỉ muốn xem thử, bỏ tick để tải thật vào <code>data/downloads/YYYY-MM-DD/</code>.</p>
@@ -74,6 +110,22 @@
         <input type="text" name="output_dir" value="data/downloads">
         <label class="check"><input type="checkbox" name="dry_run"> Dry run</label>
         <button type="submit">Run Download</button>
+      </form>
+
+      <form action="/enrich-titles" method="post">
+        <h2>Fix Titles</h2>
+        <p class="form-note">Sua cac title dang bi lay nham thanh "Ban xem truoc..." bang metadata cua tung link video.</p>
+        <label>Limit</label>
+        <input type="number" name="limit" value="20" min="1">
+        <label>Browser cookie</label>
+        <select name="browser">
+          <option value="chrome">Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="edge">Edge</option>
+          <option value="brave">Brave</option>
+        </select>
+        <label class="check"><input type="checkbox" name="dry_run" checked> Dry run</label>
+        <button type="submit">Fix Titles</button>
       </form>
 
       <form action="/generate-schedule" method="post">
@@ -117,6 +169,21 @@
           </div>
           {% if job.result %}
           <code>
+            {% if job.type == "scan" %}
+            scanned={{ job.result.scanned }},
+            discovered={{ job.result.discovered }},
+            skipped={{ job.result.skipped_existing }}
+            {% elif job.type == "title" %}
+            total={{ job.result.total }},
+            updated={{ job.result.updated }},
+            failed={{ job.result.failed }},
+            dry_run={{ job.result.dry_run }}
+            {% elif job.type == "douyin_sync" %}
+            total={{ job.result.total }},
+            imported={{ job.result.imported }},
+            skipped={{ job.result.skipped }},
+            dry_run={{ job.result.dry_run }}
+            {% else %}
             total={{ job.result.total }},
             {% if job.type == "download" %}
             downloaded={{ job.result.downloaded }},
@@ -125,6 +192,7 @@
             {% endif %}
             failed={{ job.result.failed }},
             dry_run={{ job.result.dry_run }}
+            {% endif %}
           </code>
           {% elif job.error %}
           <code>{{ job.error }}</code>

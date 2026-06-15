@@ -8,3 +8,5 @@ requests==2.32.3
 pytz==2024.1
 aiofiles==23.2.1
 yt-dlp>=2024.1.0
+playwright>=1.44.0
+openai>=1.0.0

@@ -1,161 +1,155 @@
-# Facebook Video Pipeline
+# DownVidFB - Facebook Video Pipeline
 
-Tool local để quản lý quy trình video Facebook:
+Local pipeline for managing videos before posting/scheduling them to a Facebook Fanpage.
 
-1. Import danh sách video từ Excel/CSV vào SQLite.
-2. Tải video pending bằng `yt-dlp`.
-3. Tạo lịch đăng.
-4. Upload/lên lịch video lên Facebook Fanpage bằng Meta Graph API.
+This project can work with:
 
-Project vẫn giữ 2 tool cũ trong:
+- Facebook video links imported from Excel/CSV.
+- Facebook source pages/profiles discovered by scanner.
+- Final rendered videos synced from the sibling `douyin_downloader` project.
 
-- `files/`: tool tải video cũ.
-- `Auto_upload_video_fb/`: tool đăng/lên lịch cũ.
+The project stores metadata in SQLite and exposes both CLI and local web/desktop UI.
 
-Pipeline mới nằm ở root project và dùng chung database:
+## Main Features
 
-```text
-data/pipeline.sqlite3
-```
+- Import Excel/CSV video lists.
+- Scan Facebook source profile/page metadata.
+- Download pending Facebook videos.
+- Sync completed Douyin final videos into the publishing database.
+- Generate schedule times.
+- Publish or schedule pending videos to Facebook Fanpage.
+- Local dashboard with job logs, filters, checkbox delete, and dry-run controls.
+- Keeps old downloader/publisher folders available for legacy use.
 
-## Yêu cầu
+## Requirements
 
 - Python 3.10+
-- Windows/macOS/Linux
-- Browser đã đăng nhập Facebook nếu cần tải video private bằng cookie
-- Page ID và Page Access Token nếu muốn publish lên Fanpage
+- FFmpeg if using ASR/transcribe helpers
+- Playwright browser if using browser scanner/downloader
+- Facebook Page ID and Page Access Token for real publishing
 
-## Cài đặt
-
-Tạo môi trường ảo:
+## Install
 
 ```powershell
+cd D:\Workspcae\MMO\AUTO_RENDER_UPLOAD_FB\DownVidFB
 python -m venv venv
 .\venv\Scripts\activate
-```
-
-Cài thư viện:
-
-```powershell
+python -m pip install -U pip
 pip install -r requirements.txt
+python -m playwright install chromium
 ```
 
-Nếu muốn đóng gói thành `.exe`:
+Create local config:
 
 ```powershell
-pip install pyinstaller pywebview
+copy .env.example .env
 ```
 
-## Chạy Web Pipeline
+Fill `.env` only on your machine. Never commit real tokens.
+
+## Run Web Dashboard
 
 ```powershell
+.\venv\Scripts\activate
 python -m uvicorn pipeline_web.main:app --host 127.0.0.1 --port 8010
 ```
 
-Mở:
+Open:
 
 ```text
 http://127.0.0.1:8010
 ```
 
-Trên dashboard có các phần:
+Dashboard sections:
 
-- `Import Excel/CSV`
-- `Download Pending`
-- `Generate Schedule`
-- `Publish Pending`
-- `Recent Jobs`
-- Bảng video có filter và checkbox xóa dòng
+- Scan Facebook Source
+- Import Excel/CSV
+- Sync Douyin Finals
+- Download Pending
+- Generate Schedule
+- Publish Pending
+- Recent Jobs and live logs
+- Videos table with filters and row selection
 
-## Chạy dạng Desktop App
+## Run Desktop Wrapper
 
 ```powershell
 python desktop_app.py
 ```
 
-Nếu có `pywebview`, tool sẽ mở trong cửa sổ app riêng. Nếu chưa có, nó sẽ mở bằng browser.
+If `pywebview` is installed, it opens as a desktop window. Otherwise it opens in your browser.
 
-Build `.exe`:
+Build exe:
 
 ```powershell
 .\scripts\build_desktop_exe.ps1
 ```
 
-File build ra ở:
+## Common Workflow
+
+### A. Publish videos rendered by Douyin project
+
+1. Finish processing videos in `douyin_downloader`.
+2. Confirm final files are H.264/AAC in:
 
 ```text
-dist/VideoPipeline.exe
+..\douyin_downloader\output\final\
 ```
 
-## Format File Import
+3. In DownVidFB dashboard, click `Sync Douyin Finals`.
+4. Keep `Dry run` checked first to preview.
+5. Uncheck `Dry run` and sync for real.
+6. Generate schedule.
+7. Review rows in the table.
+8. Run `Publish Pending` with dry-run first.
+9. Uncheck dry-run only when ready to post/schedule to Facebook.
 
-### 1. CSV/Excel để tải video từ Facebook
+CLI equivalent:
 
-Cột khuyến nghị:
+```powershell
+python main.py sync-douyin-finals --dry-run --limit 20
+python main.py sync-douyin-finals --limit 20
+python main.py generate-schedule --start-time "2026-06-15 08:00:00" --interval-minutes 60 --limit 20
+python main.py publish-pending --dry-run --limit 5
+```
+
+### B. Import Excel/CSV list
+
+Supported columns for source links:
 
 ```text
 video_id,title,source_url,created_at
 ```
 
-Ví dụ:
+Recommended: use `.xlsx` for Vietnamese text. If using CSV, export as `CSV UTF-8`.
 
-```csv
-video_id,title,source_url,created_at
-1,"Tiêu đề video","https://www.facebook.com/share/v/xxxx/","2026-06-01 10:30"
+Example:
+
+```powershell
+python main.py import-excel files\sample_videos.csv
 ```
 
-Cột quan trọng:
+### C. Scan Facebook source
 
-- `source_url`: link video Facebook.
-- `title`: tiêu đề/caption.
-- `created_at`: ngày tạo.
-- `video_id`: chỉ là số thứ tự, không dùng làm khóa Facebook.
-
-Lưu ý encoding:
-
-- Nên dùng `.xlsx` nếu có tiếng Việt.
-- Nếu dùng CSV, hãy lưu dạng `CSV UTF-8`.
-- Nếu CSV đã có dấu `?` trong tiêu đề, app không thể tự khôi phục chính xác. Hãy sửa file nguồn hoặc thêm cột `title_rewrite`.
-
-### 2. Excel/CSV để đăng video có sẵn
-
-Cột hỗ trợ:
-
-```text
-filename,title,hashtag,scheduled_time
+```powershell
+python main.py scan-source --source-page-url "https://www.facebook.com/page-or-profile" --date-from 2026-06-01 --date-to 2026-06-10 --limit 20 --scanner browser
 ```
 
-Ví dụ:
+Test scanner without Facebook:
 
-```text
-video1.mp4 | Tiêu đề video | #viral | 2026-06-11 08:00:00
+```powershell
+python main.py scan-source --source-page-url "https://www.facebook.com/example" --date-from 2026-06-01 --date-to 2026-06-10 --limit 3 --scanner mock
 ```
-
-Video có thể nằm trong:
-
-```text
-Auto_upload_video_fb/videos/
-Auto_upload_video_fb/downloads/
-data/downloads/
-```
-
-## Quy trình sử dụng Web
-
-1. Import file Excel/CSV.
-2. Vào tab `Cần tải`, kiểm tra danh sách.
-3. Chạy `Download Pending`.
-   - Tick `Dry run` để xem thử.
-   - Bỏ tick `Dry run` để tải thật.
-4. Sau khi tải, kiểm tra cột `Local File`.
-5. Chạy `Generate Schedule`.
-6. Vào tab `Cần đăng`, xóa các dòng không muốn publish.
-7. Chạy `Publish Pending`.
-   - Tick `Dry run` để kiểm tra danh sách.
-   - Bỏ tick `Dry run` để gửi thật lên Facebook.
 
 ## CLI Commands
 
-Import:
+Initialize DB:
+
+```powershell
+python scripts\init_pipeline_db.py
+```
+
+Import Excel/CSV:
 
 ```powershell
 python main.py import-excel files\sample_videos.csv
@@ -164,68 +158,77 @@ python main.py import-excel files\sample_videos.csv
 Download pending:
 
 ```powershell
-python main.py download-pending --limit 10 --browser firefox
+python main.py download-pending --limit 10 --browser chrome
 ```
 
 Generate schedule:
 
 ```powershell
-python main.py generate-schedule --start-time "2026-06-11 08:00:00" --interval-minutes 60 --limit 20
+python main.py generate-schedule --start-time "2026-06-15 08:00:00" --interval-minutes 60 --limit 50
 ```
 
 Publish pending:
 
 ```powershell
-python main.py publish-pending --limit 5 --page-id YOUR_PAGE_ID --page-access-token YOUR_TOKEN
+python main.py publish-pending --limit 5 --page-id YOUR_PAGE_ID --page-access-token YOUR_PAGE_ACCESS_TOKEN
 ```
 
-Hoặc dùng biến môi trường:
+Or use environment variables:
 
 ```powershell
 $env:FB_PAGE_ID="YOUR_PAGE_ID"
-$env:FB_PAGE_ACCESS_TOKEN="YOUR_TOKEN"
+$env:FB_PAGE_ACCESS_TOKEN="YOUR_PAGE_ACCESS_TOKEN"
 python main.py publish-pending --limit 5
+```
+
+Transcribe large media safely:
+
+```powershell
+python main.py transcribe "data\downloads\video.mp4" --dry-run
 ```
 
 ## Database
 
-SQLite database mặc định:
+Default SQLite database:
 
 ```text
 data/pipeline.sqlite3
 ```
 
-Init database:
+Main table: `videos`.
 
-```powershell
-python scripts\init_pipeline_db.py
+Important fields:
+
+```text
+source_url, source_video_id, source_page_url,
+title_original, title_rewrite, created_at,
+local_filename, download_status, publish_status,
+schedule_time, fb_post_id, error_message
 ```
 
-Xem dữ liệu:
+The database is local runtime data and is ignored by Git.
+
+## GitHub Safety
+
+The `.gitignore` excludes:
+
+- `.env`, tokens, cookies, browser sessions
+- SQLite databases and runtime data
+- downloaded/uploaded/generated videos
+- Excel/CSV user data except safe sample files
+- logs, cache, virtualenvs, and build artifacts
+
+Before pushing:
 
 ```powershell
-python scripts\inspect_pipeline_db.py --limit 20
+git status --ignored
 ```
 
-Không nên commit database thật lên GitHub.
+Make sure only source code, safe sample files, docs, and requirements are staged.
 
-## Bảo mật
+## Notes
 
-Không commit:
-
-- Page Access Token
-- SQLite database thật
-- Video tải về
-- File log/chứa dữ liệu riêng tư
-
-Page Access Token chỉ nhập khi publish hoặc truyền qua biến môi trường.
-
-## Ghi chú về Facebook API
-
-Để publish video, token cần quyền phù hợp, thường gồm:
-
-- `pages_manage_posts`
-- `pages_read_engagement`
-- `publish_video`
-
-Nếu thiếu quyền hoặc token hết hạn, log Publish Progress sẽ hiển thị lỗi từ Facebook.
+- Always test publishing with `Dry run` first.
+- Do not commit Page Access Tokens or personal cookies.
+- Generated videos can be very large and should stay out of Git.
+- If Facebook upload shows audio-only, verify the video is H.264/AAC before syncing/publishing.

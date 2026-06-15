@@ -15,6 +15,7 @@ __all__ = [
     "list_publish_pending",
     "list_recent_videos",
     "list_videos_for_view",
+    "list_title_enrich_candidates",
     "get_pipeline_stats",
     "delete_videos_for_view",
     "delete_video_ids",
@@ -75,6 +76,37 @@ def list_videos_for_view(db_path=DEFAULT_DB_PATH, view: str = "action", limit: i
     sql = f"SELECT * FROM videos {where_sql} ORDER BY id DESC LIMIT ?"
     with get_connection(db_path) as conn:
         return list(conn.execute(sql, (limit,)))
+
+
+def list_title_enrich_candidates(db_path=DEFAULT_DB_PATH, limit: int = 50):
+    init_db(db_path)
+    with get_connection(db_path) as conn:
+        return list(
+            conn.execute(
+                """
+                SELECT * FROM videos
+                WHERE source_url != ''
+                  AND (
+                    COALESCE(title_original, '') = ''
+                    OR title_original LIKE '%Bản xem trước%'
+                    OR title_original LIKE '%thước phim%'
+                    OR title_original LIKE '%preview%'
+                    OR title_original LIKE '%Facebook video%'
+                    OR title_original LIKE '%facebook.com/%'
+                    OR title_original LIKE '%Xemtronbộ%'
+                    OR title_original LIKE '%Xem tiếp trọn bộ phim%'
+                    OR title_original LIKE '%TRỌN BỘ:%'
+                    OR title_original LIKE '%Cho tôi xem%'
+                    OR title_original LIKE '%CẬP NHẬT TRỌN BỘ%'
+                    OR title_original LIKE '%BỘ PHIM ĐANG HOT%'
+                    OR title_original LIKE '%hay quá%'
+                  )
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            )
+        )
 
 
 def get_pipeline_stats(db_path=DEFAULT_DB_PATH) -> dict:

@@ -1,18 +1,106 @@
-Auto_upload_video_fb/videos/
-*.mp4
-data/downloads
-*.mp4
-venv/
-*/venv/
+# Python cache
 __pycache__/
 */__pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+*/venv/
+
+# Local secrets and credentials
 .env
-*.log
-data/*.sqlite3
-data/*.sqlite
-data/*.db
+.env.*
+!.env.example
+*.token
+*.secret
+cookies.txt
+*.cookies.txt
+
+# Local databases and runtime data
+data/
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db-*
+*.sqlite-*
+
+# Uploaded/imported user files
+uploads/
+imports/
+exports/
+data.xlsx
 ~$*.xlsx
-dist/
+*.xls
+*.xlsx
+*.csv
+!files/sample_videos.csv
+!files/README.md
+
+# Downloaded/generated media
+Auto_upload_video_fb/videos/
+Auto_upload_video_fb/downloads/
+files/videos/
+files/downloads/
+data/downloads/
+data/asr_chunks/
+data/transcripts/
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.m4v
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+*.srt
+*.vtt
+*.ass
+
+# Browser / automation profiles
+pw_profile/
+playwright_profile/
+**/BrowserMetrics/
+**/Cache/
+**/Code Cache/
+**/GPUCache/
+**/GrShaderCache/
+**/ShaderCache/
+**/Session Storage/
+**/Local Storage/
+**/IndexedDB/
+**/Service Worker/
+**/Sessions/
+**/Snapshots/
+
+# Logs and jobs
+logs/
+*.log
+*.tmp
+*.part
+
+# Build artifacts
 build/
+dist/
 *.spec
+*.manifest
+*.exe
+*.dll
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
