@@ -7,6 +7,7 @@ from pathlib import Path
 from pipeline_core.db import DEFAULT_DB_PATH as DEFAULT_PIPELINE_DB_PATH
 from pipeline_core.models import VideoRecord
 from pipeline_core.repository import upsert_video_record
+from shared.title_from_srt import generate_title_from_srt
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_DOUYIN_PROJECT_DIR = BASE_DIR.parent / "douyin_downloader"
@@ -42,7 +43,8 @@ def sync_douyin_finals(
             _emit(progress_cb, "item_skip", f"[{index}/{len(rows)}] {item['message']}", **item)
             continue
 
-        record = _row_to_publish_record(row, final_path)
+        title = _title_for_publish(row, final_path, douyin_db, dry_run=dry_run, progress_cb=progress_cb, index=index, total=len(rows))
+        record = _row_to_publish_record(row, final_path, title=title)
         item = {
             "source_video_id": record.source_video_id,
             "local_filename": record.local_filename,
@@ -56,7 +58,7 @@ def sync_douyin_finals(
         _emit(
             progress_cb,
             "item_done",
-            f"[{index}/{len(rows)}] {'Dry run' if dry_run else 'Imported'} {final_path.name}",
+            f"[{index}/{len(rows)}] {'Dry run' if dry_run else 'Imported'} {final_path.name} | title={record.title_original}",
             **item,
         )
 
@@ -112,17 +114,49 @@ def _list_douyin_final_rows(db_path: Path, limit: int) -> list[sqlite3.Row]:
         conn.close()
 
 
-def _row_to_publish_record(row: sqlite3.Row | dict, final_path: Path) -> VideoRecord:
+def _title_for_publish(
+    row: sqlite3.Row | dict,
+    final_path: Path,
+    douyin_db: Path,
+    *,
+    dry_run: bool,
+    progress_cb=None,
+    index: int = 0,
+    total: int = 0,
+) -> str:
+    fallback_title = _strip_final_suffix(str(_get(row, "title") or final_path.stem)).strip() or _strip_final_suffix(final_path.stem)
+    if not _needs_ai_title(fallback_title, row, final_path):
+        return fallback_title
+
+    srt_path = _find_srt_for_row(row, final_path, douyin_db)
+    if not srt_path:
+        _emit(progress_cb, "title_skip", f"[{index}/{total}] No SRT found for title generation: {final_path.name}")
+        return fallback_title
+
+    try:
+        _emit(progress_cb, "title_start", f"[{index}/{total}] Generating AI title from SRT: {srt_path.name}")
+        title = generate_title_from_srt(srt_path)
+        if title:
+            _emit(progress_cb, "title_done", f"[{index}/{total}] AI title: {title}")
+            if not dry_run:
+                _update_douyin_title(row, douyin_db, title)
+            return title
+    except Exception as exc:
+        _emit(progress_cb, "title_error", f"[{index}/{total}] AI title failed: {exc}")
+    return fallback_title
+
+
+def _row_to_publish_record(row: sqlite3.Row | dict, final_path: Path, *, title: str | None = None) -> VideoRecord:
     raw_source_id = _strip_final_suffix(str(_get(row, "source_video_id") or final_path.stem))
     source_video_id = f"douyin_{raw_source_id}"
-    title = _strip_final_suffix(str(_get(row, "title") or final_path.stem)).strip() or _strip_final_suffix(final_path.stem)
+    publish_title = (title or _strip_final_suffix(str(_get(row, "title") or final_path.stem))).strip() or _strip_final_suffix(final_path.stem)
     created_at = str(_get(row, "updated_at") or _get(row, "created_at") or datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     return VideoRecord(
         source_url=str(_get(row, "source_video_url") or _get(row, "local_video_path") or final_path),
         source_video_id=source_video_id,
         source_page_url="douyin_downloader",
-        title_original=title,
-        title_rewrite=title,
+        title_original=publish_title,
+        title_rewrite=publish_title,
         created_at=created_at,
         local_filename=str(final_path.resolve()),
         download_status="downloaded",
@@ -131,6 +165,69 @@ def _row_to_publish_record(row: sqlite3.Row | dict, final_path: Path) -> VideoRe
         fb_post_id="",
         error_message="",
     )
+
+
+def _needs_ai_title(title: str, row: sqlite3.Row | dict, final_path: Path) -> bool:
+    title = (title or "").strip()
+    if not title:
+        return True
+    source_id = _strip_final_suffix(str(_get(row, "source_video_id") or final_path.stem))
+    if title == source_id or title == _strip_final_suffix(final_path.stem):
+        return True
+    if "_" in title and len(title) >= 35:
+        return True
+    if title.lower().startswith("douyin_"):
+        return True
+    return False
+
+
+def _find_srt_for_row(row: sqlite3.Row | dict, final_path: Path, db_path: Path) -> Path | None:
+    candidates: list[Path] = []
+    for key in ("translated_srt_path", "transcript_srt_path"):
+        raw = str(_get(row, key) or "").strip()
+        if raw:
+            path = Path(raw)
+            candidates.append(path if path.is_absolute() else db_path.parent.parent / path)
+
+    candidates.extend([
+        final_path.with_suffix(".srt"),
+        final_path.parent / f"{_strip_final_suffix(final_path.stem)}.final.srt",
+        final_path.parent / f"{final_path.stem}.srt",
+    ])
+
+    project_dir = db_path.parent.parent
+    work_dir = project_dir / "output" / "work"
+    stem = _strip_final_suffix(final_path.stem)
+    if work_dir.exists():
+        candidates.extend(work_dir.glob(f"**/{stem}.vi.transcript.srt"))
+        candidates.extend(work_dir.glob(f"**/{stem}.final.vi.transcript.srt"))
+        candidates.extend(work_dir.glob(f"**/{stem}*.vi.transcript.srt"))
+
+    seen: set[str] = set()
+    for candidate in candidates:
+        key = str(candidate.resolve()).lower() if candidate.exists() else str(candidate).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        if candidate.exists() and candidate.is_file():
+            return candidate
+    return None
+
+
+def _update_douyin_title(row: sqlite3.Row | dict, db_path: Path, title: str) -> None:
+    source_id = str(_get(row, "source_video_id") or "").strip()
+    final_path = str(_get(row, "final_video_path") or "").strip()
+    if not source_id and not final_path:
+        return
+    conn = sqlite3.connect(db_path)
+    try:
+        if source_id:
+            conn.execute("UPDATE videos SET title = ?, updated_at = datetime('now') WHERE source_video_id = ?", (title, source_id))
+        elif final_path:
+            conn.execute("UPDATE videos SET title = ?, updated_at = datetime('now') WHERE final_video_path = ?", (title, final_path))
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def _resolve_final_path(row: sqlite3.Row | dict, db_path: Path) -> Path:

@@ -1,5 +1,7 @@
 import argparse
+import json
 import logging
+import sys
 from pathlib import Path
 
 from shared.asr import transcribe_media_openai
@@ -143,7 +145,7 @@ def main() -> None:
         parser.error(f"Unsupported command: {args.command}")
         return
 
-    print(result)
+    _print_result(result)
 
 
 def command_import_excel(input_file: str, db_path: str) -> dict:
@@ -186,6 +188,15 @@ def command_scan_source(args, db_path: str) -> dict:
         "skipped_existing": summary.skipped_existing,
     }
 
+
+
+
+def _print_result(result) -> None:
+    text = json.dumps(result, ensure_ascii=False, indent=2, default=str)
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        sys.stdout.buffer.write(text.encode("utf-8", errors="replace") + b"\n")
 
 if __name__ == "__main__":
     main()

@@ -232,3 +232,33 @@ Make sure only source code, safe sample files, docs, and requirements are staged
 - Do not commit Page Access Tokens or personal cookies.
 - Generated videos can be very large and should stay out of Git.
 - If Facebook upload shows audio-only, verify the video is H.264/AAC before syncing/publishing.
+## Title from Douyin SRT
+
+When videos are processed in `douyin_downloader`, the Vietnamese SRT can be used to generate a Facebook-ready title with OpenAI. The generated title is saved in:
+
+```text
+..\douyin_downloader\data\app.db -> videos.title
+```
+
+When you run `Sync Douyin Finals`, DownVidFB reads that title and stores it in the Facebook pipeline database as:
+
+```text
+title_original
+title_rewrite
+```
+
+So the publish step can use the generated title instead of the filename.
+
+For old Douyin videos, run this in the Douyin project first:
+
+```powershell
+cd ..\douyin_downloader
+python tools\generate_titles_from_srt.py --limit 20
+```
+
+Then return to DownVidFB and sync again:
+
+```powershell
+cd ..\DownVidFB
+python main.py sync-douyin-finals --limit 20
+```
